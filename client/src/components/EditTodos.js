@@ -5,6 +5,26 @@ const EditTodos = ({ todo }) => {
 
 	console.log(todo)
 
+	// Edit description function
+	const updateDescription = async (e) => {
+		e.preventDefault()
+		try {
+			const body = { description }
+			const response = await fetch(
+				`http://localhost:5000/todos/${todo.todo_id}`,
+				{
+					method: 'PUT',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify(body),
+				}
+			)
+			// console.log(response)
+			window.location = '/'
+		} catch (err) {
+			console.error(err.message)
+		}
+	}
+
 	return (
 		<Fragment>
 			<button
@@ -32,21 +52,33 @@ const EditTodos = ({ todo }) => {
 								type='button'
 								class='close'
 								data-dismiss='modal'
-								aria-label='Close'>
+								aria-label='Close'
+								onClick={() => setDescription(todo.description)}>
 								<span aria-hidden='true'>&times;</span>
 							</button>
 						</div>
 						<div class='modal-body'>
-							<input type='text' className='form-control' value={description} />
+							<input
+								type='text'
+								className='form-control'
+								value={description}
+								onChange={(e) => setDescription(e.target.value)}
+							/>
 						</div>
 						<div class='modal-footer'>
 							<button
 								type='button'
 								class='btn btn-warning'
-								data-dismiss='modal'>
-								Edit
+								data-dismiss='modal'
+								onClick={(e) => updateDescription(e)}>
+								Save
 							</button>
-							<button type='button' class='btn btn-danger' data-dismiss='modal'>
+							<button
+								type='button'
+								class='btn btn-danger'
+								data-dismiss='modal'
+								onClick={() => setDescription(todo.description)}>
+								{' '}
 								Close
 							</button>
 						</div>
